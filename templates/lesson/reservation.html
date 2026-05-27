@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>English Group Lesson Reservation</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            margin:40px;
+            background:#f4f6f8;
+        }
+
+        h2{
+            text-align:center;
+            margin-bottom:30px;
+            color:#333;
+        }
+
+        .form-container{
+            max-width:600px;
+            margin:0 auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        label{
+            display:block;
+            margin-top:18px;
+            margin-bottom:6px;
+            font-weight:bold;
+            color:#333;
+        }
+
+        input,
+        textarea{
+            width:100%;
+            padding:10px;
+            border:1px solid #ccc;
+            border-radius:6px;
+            box-sizing:border-box;
+            font-size:14px;
+        }
+
+        input:focus,
+        textarea:focus{
+            outline:none;
+            border-color:#2c7be5;
+            box-shadow:0 0 5px rgba(44,123,229,0.3);
+        }
+
+        .info-box{
+            background:#f1f5ff;
+            padding:10px 15px;
+            border-radius:6px;
+            border-left:4px solid #2c7be5;
+            margin-bottom:10px;
+        }
+
+        .info-text{
+            margin:0;
+            color:#333;
+        }
+
+        .btn{
+            width:100%;
+            margin-top:30px;
+            padding:12px;
+            border:none;
+            background:#28a745;
+            color:white;
+            font-size:16px;
+            border-radius:6px;
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        .btn:hover{
+            background:#218838;
+        }
+        
+        .back-link{
+    		display:block;
+    		text-align:center;
+    		margin-top:10px;
+    		padding:12px;
+    		background:#6c757d;
+    		color:white;
+    		border-radius:6px;
+    		text-decoration:none;
+		}
+
+		.back-link:hover{
+    		background:#5a6268;
+		}
+        .error-message{
+            color:red;
+            font-weight:bold;
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+
+    <h2>英会話レッスン予約フォーム</h2>
+
+    <p class="error-message"
+       th:if="${errorMessage}"
+       th:text="${errorMessage}">
+    </p>
+
+    <form th:action="@{/reservation}"
+          method="post"
+          th:object="${reservationInputForm}">
+
+        <input type="hidden"
+               name="lessonId"
+               th:value="*{lessonId}">
+
+        <!-- 予約日 -->
+        <label>予約日</label>
+
+        <div class="info-box">
+            <p class="info-text"
+               th:text="*{date}">
+            </p>
+        </div>
+
+        <input type="hidden" th:field="*{date}">
+
+        <!-- 時間 -->
+        <label>時間</label>
+
+        <div class="info-box">
+            <p class="info-text"
+               th:text="*{time}">
+            </p>
+        </div>
+
+        <input type="hidden" th:field="*{time}">
+
+        <!-- クラス -->
+        <label>クラス</label>
+
+        <div class="info-box">
+            <p class="info-text"
+               th:text="${lesson.className}">
+            </p>
+        </div>
+        
+        <!-- レベル -->
+        <label>レベル</label>
+
+        <div class="info-box">
+            <p class="info-text"
+               th:text="${lesson.level}">
+            </p>
+        </div>
+
+        <!-- 名前 -->
+        <label for="name">名前</label>
+
+        <input type="text"
+               th:field="*{name}"
+               id="name"
+               required>
+               
+        <!-- レッスン受講者名 -->
+		<label for="studentName">
+    		レッスン受講者名
+    		<span style="font-weight:normal; color:#666;">
+        		（予約者と同じ場合は入力不要）
+    		</span>
+		</label>
+
+		<input type="text"
+       		   th:field="*{studentName}"
+       		   id="studentName"
+       		   placeholder="例：山田 花子">
+
+        <!-- 年齢 -->
+        <label for="age">年齢</label>
+
+        <input type="number"
+               th:field="*{age}"
+               id="age"
+               min="1"
+               max="120">
+
+        <!-- 学習歴 -->
+        <label for="learning_history">英語学習歴</label>
+
+        <input type="text"
+               th:field="*{learningHistory}"
+               id="learning_history"
+               placeholder="例：3年間学校で学習、オンライン英会話6ヶ月など">
+
+        <!-- 要望 -->
+        <label for="request">要望</label>
+
+        <textarea th:field="*{request}"
+                  id="request"
+                  rows="4"
+                  placeholder="例：発音を重点的に練習したい">
+        </textarea>
+
+        <!-- 予約ボタン -->
+        <button type="submit" class="btn">
+            予約する
+        </button>
+        
+        <!-- 戻るボタン -->
+		<a th:href="@{/lessons}" class="back-link">
+    		戻る
+		</a>
+
+    </form>
+
+</div>
+
+</body>
+</html>

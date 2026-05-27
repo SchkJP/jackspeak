@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>English Group Lesson Reservation</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin:40px;
+            background:#f4f6f8;
+        }
+
+        h1{
+            text-align:center;
+        }
+        
+         /* 検索バー用 */
+        .search-box{
+            margin:20px 0;
+            text-align:left;
+        }
+
+        .search-input{
+            padding:8px;
+            width:250px;
+            border:1px solid #ccc;
+            border-radius:4px;
+        }
+
+        .search-btn{
+            padding:8px 14px;
+            border:none;
+            background:#2c7be5;
+            color:white;
+            border-radius:4px;
+            cursor:pointer;
+        }
+
+        table{
+            width:100%;
+            border-collapse: collapse;
+            background:white;
+        }
+
+        th, td{
+            padding:12px;
+            border-bottom:1px solid #ddd;
+            text-align:center;
+        }
+
+        th{
+            background:#2c7be5;
+            color:white;
+        }
+
+        tr:hover{
+            background:#f1f1f1;
+        }
+
+        .btn{
+            padding:6px 12px;
+            border:none;
+            background:#28a745;
+            color:white;
+            border-radius:4px;
+            cursor:pointer;
+        }
+
+        .btn:disabled{
+            background:#aaa;
+        }
+
+        .full{
+            color:red;
+            font-weight:bold;
+        }
+
+    </style>
+</head>
+<body>
+
+<h1>English Group Lesson Reservation</h1>
+
+<!-- 検索バー -->
+<div class="search-box">
+    <form th:action="@{/yourLessonList}" method="get">
+        <input type="text"
+               name="name"
+               class="search-input"
+               placeholder="予約者名を入力">
+
+        <button type="submit" class="search-btn">
+            検索
+        </button>
+    </form>
+</div>
+
+
+<table>
+    <thead>
+        <tr>
+            <th>日時</th>
+            <th>クラス</th>
+            <th>レベル</th>
+            <th>人数</th>
+            <th>残り枠</th>
+            <th>予約</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <tr th:each="lesson : ${lessons}">
+            <td th:text="${#temporals.format(lesson.lessonDate,'yyyy/MM/dd HH:mm')}"></td>
+            <td th:text="${lesson.className}"></td>
+            <td th:text="${lesson.level}"></td>
+            <td th:text="${lesson.capacity}"></td>
+
+            <td>
+                <span th:text="${lesson.reservedCount}"></span>
+                /
+                <span th:text="${lesson.capacity}"></span>
+            </td>
+
+            
+
+            <td>
+                <form th:action="@{/reservation}" method="get">
+                    <input type="hidden" name="lessonId" th:value="${lesson.lessonId}" />
+                    <button class="btn"
+                            th:disabled="${lesson.getRestNumber == 0}">
+                        予約
+                    </button>
+                </form>
+            </td>
+
+        </tr>
+
+    </tbody>
+
+</table>
+
+</body>
+</html>
