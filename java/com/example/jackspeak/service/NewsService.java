@@ -1,28 +1,28 @@
 package com.example.jackspeak.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.jackspeak.dto.Article;
+import com.example.jackspeak.dto.NewsResponse;
 
 @Service
 public class NewsService {
 
-    public List<Article> getTopHeadlines() {
+    @Value("${api_key}")
+	private String API_KEY;
+
+    public NewsResponse getTopHeadlines() {
+
+        String url =
+                "https://newsapi.org/v2/top-headlines?country=us&category=technology&apiKey="
+                        + API_KEY;
 
         RestTemplate restTemplate = new RestTemplate();
 
-        String url =
-            "https://newsapi.org/v2/top-headlines?country=us&apiKey=API_KEY";
+        NewsResponse response =
+                restTemplate.getForObject(url, NewsResponse.class);
 
-        String response =
-            restTemplate.getForObject(url, String.class);
-
-        System.out.println(response);
-
-        return new ArrayList<>();
+        return response;
     }
 }
