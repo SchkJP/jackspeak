@@ -1,12 +1,10 @@
 package com.example.jackspeak.controller;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.jackspeak.dto.Article;
+import com.example.jackspeak.dto.NewsResponse;
 import com.example.jackspeak.service.NewsService;
 
 @Controller
@@ -19,12 +17,16 @@ public class NewsController {
 	}
 	
 	@GetMapping("/news")
-	public String news(Model model) {
+	public String showNews(Model model) {
 		
-		// APIからニュース取得
-        List<Article> articles = newsSer.getTopHeadlines();
-        
-        model.addAttribute("articles", articles);
+//		// APIからニュース取得
+//        List<Article> articles = newsSer.getTopHeadlines();
+//        
+//        model.addAttribute("articles", articles);
+		
+		NewsResponse response = newsSer.getTopHeadlines();
+		
+		model.addAttribute("articles", response.getArticles());
         
 		return "news";
 	}
